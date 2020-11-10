@@ -1,16 +1,16 @@
 #include <VL53L0X.h>
-#define L0XFrontCTxshut 39
-#define L0XFrontAxshut 38
-#define L0XFrontBxshut 49
-#define L0XRightCTxshut 51
-#define L0XRightAxshut 47
+#define L0XFrontCTxshut 41
+#define L0XFrontAxshut 40
+#define L0XFrontBxshut 50
+#define L0XRightCTxshut 53
+#define L0XRightAxshut 49
 #define L0XRightBxshut 48
-#define L0XLeftCTxshut 41
-#define L0XLeftAxshut 40
-#define L0XLeftBxshut 45
+#define L0XLeftCTxshut 43
+#define L0XLeftAxshut 38
+#define L0XLeftBxshut 47
 #define L0XBackCTxshut 46
-#define L0XBackAxshut 50
-#define L0XBackBxshut 43
+#define L0XBackAxshut 51
+#define L0XBackBxshut 45
 VL53L0X FrontCT;
 VL53L0X FrontA;
 VL53L0X FrontB;
@@ -140,16 +140,16 @@ void ToFInitialize(){
 
 
 void ReadToF(){
-  ToFFrontCT = ((FrontCT.readRangeContinuousMillimeters()+60)*1)+(ToFFrontCT*0);
-  ToFFrontA = ((FrontA.readRangeContinuousMillimeters()+60)*1)+(ToFFrontA*0);
-  ToFFrontB = ((FrontB.readRangeContinuousMillimeters()+60)*1)+(ToFFrontB*0);
-  ToFRightCT = ((RightCT.readRangeContinuousMillimeters()+60)*1)+(ToFRightCT*0);
-  ToFRightA = ((RightA.readRangeContinuousMillimeters()+60)*1)+(ToFRightA*0);
-  ToFRightB = ((RightB.readRangeContinuousMillimeters()+60)*1)+(ToFRightB*0);
-  ToFLeftCT = ((LeftCT.readRangeContinuousMillimeters()+60)*1)+(ToFLeftCT*0);
-  ToFLeftA = ((LeftA.readRangeContinuousMillimeters()+60)*1)+(ToFLeftA*0);
-  ToFLeftB = ((LeftB.readRangeContinuousMillimeters()+60)*1)+(ToFLeftB*0);
-  ToFBackCT = ((BackCT.readRangeContinuousMillimeters()+60)*1)+(ToFBackCT*0);
-  ToFBackA = ((BackA.readRangeContinuousMillimeters()+60)*1)+(ToFBackA*0);
-  ToFBackB = ((BackB.readRangeContinuousMillimeters()+60)*1)+(ToFBackB*0);
+  ToFFrontCT = FrontCT.readRangeContinuousMillimeters()+60;
+  ToFFrontA = FrontA.readRangeContinuousMillimeters()+60;
+  ToFFrontB = FrontB.readRangeContinuousMillimeters()+60;
+  ToFRightCT = RightCT.readRangeContinuousMillimeters()+60;
+  ToFRightA = RightA.readRangeContinuousMillimeters()+60;
+  ToFRightB = RightB.readRangeContinuousMillimeters()+60;
+  ToFLeftCT = LeftCT.readRangeContinuousMillimeters()+60;
+  ToFLeftA = LeftA.readRangeContinuousMillimeters()+60;
+  ToFLeftB = LeftB.readRangeContinuousMillimeters()+60;
+  ToFBackCT = BackCT.readRangeContinuousMillimeters()+60;
+  ToFBackA = BackA.readRangeContinuousMillimeters()+60;
+  ToFBackB = BackB.readRangeContinuousMillimeters()+60;
 }

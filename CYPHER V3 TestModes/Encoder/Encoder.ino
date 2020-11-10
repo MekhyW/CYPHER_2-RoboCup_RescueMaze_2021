@@ -1,8 +1,8 @@
 #include <Encoder.h>
 Encoder EB(29, 27);
-Encoder DB(31, 33);
-Encoder EA(32, 30);
-Encoder DA(42, 44);
+Encoder DB(25, 23);
+Encoder EA(30, 32);
+Encoder DA(44, 42);
 int EncPulseEB=0;
 int EncPulseDB=0;
 int EncPulseEA=0;

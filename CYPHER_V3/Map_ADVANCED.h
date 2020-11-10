@@ -13,26 +13,6 @@ void EraseAccessMap(){
 	}
 }
 
-void UpdateBackup(){
-  dueFlashStorage.write(0, PositionX);
-  dueFlashStorage.write(1, PositionY);
-  dueFlashStorage.write(2, currentfloor);
-}
-
-void CheckBackup(){
-  if(digitalRead(SwitchPin) == LOW){
-    PositionX = (int)dueFlashStorage.read(0);
-    PositionY = (int)dueFlashStorage.read(1);
-    currentfloor = (int)dueFlashStorage.read(2);
-    EraseAccessMap();
-    MotorsStop();
-    MotorsRelease();
-    ResetEncoders();
-    PressToStart();
-    //BackForth();
-  }
-}
-
 void MarkAccess(){
   if(IsForwardAvailable==true && floodfill[currentfloor][ForwardX][ForwardY]==0){
     accessmap[currentfloor][ForwardX][ForwardY] = floodfill[currentfloor][PositionX][PositionY];

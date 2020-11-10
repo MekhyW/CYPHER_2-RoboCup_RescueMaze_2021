@@ -3,7 +3,7 @@ byte realsensearray[10];
 int NewPositionX = 15;
 int NewPositionY = 15;
 
-void ReadRealsense(){
+void ReadRealsense(bool UpdatePos){
 	Serial.flush();
   	if (Serial.available() > 0){
     	Serial.readBytesUntil('\n', realsensearray, sizeof(realsensearray));
@@ -26,14 +26,23 @@ void ReadRealsense(){
         		NewPositionY += realsensearray[3]-48;
       		}
     	}
-    	for (int x = 0; x < sizeof(realsensearray) / sizeof(realsensearray[0]); x++){
+    	for(int x = 0; x < sizeof(realsensearray) / sizeof(realsensearray[0]); x++){
       		realsensearray[x] = 0;
     	}
-    	if(NewPositionX >= 0){
+    	if(UpdatePos == true && NewPositionX >= 0 && NewPositionY >= 0){
       		PositionX = NewPositionX;
+          PositionY = NewPositionY;
     	}
-    	if(NewPositionY >= 0){
-      		PositionY = NewPositionY;
-    	}
+      if(UpdatePos == false && NewPositionX >= 0 && NewPositionY >= 0){
+        if(NewPositionX < PositionX && NewPositionY == PositionY){
+          Quadrant = 1;
+        } else if(NewPositionX > PositionX && NewPositionY == PositionY){
+          Quadrant = 2;
+        } else if(NewPositionX == PositionX && NewPositionY > PositionY){
+          Quadrant = 3;
+        } else if(NewPositionX == PositionX && NewPositionY < PositionY){
+          Quadrant = 4;
+        }
+      }
 	}
 }

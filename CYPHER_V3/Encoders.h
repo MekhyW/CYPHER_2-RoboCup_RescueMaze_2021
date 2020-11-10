@@ -2,9 +2,9 @@
 #define TileDist 4000
 #define TurnDist 1850
 Encoder EB(29, 27);
-Encoder DB(31, 33);
-Encoder EA(32, 30);
-Encoder DA(42, 44);
+Encoder DB(25, 23);
+Encoder EA(30, 32);
+Encoder DA(44, 42);
 //E=left , D=right
 //A=front , B=back
 int TileDistLocal=5100;
@@ -24,17 +24,15 @@ int EncPulseDAbackup=0;
 void UpdateEncoders(){
   if(Locked==false){
     EncPulseEB=abs(EB.read());
-    EncPulseDB=abs(DB.read());
     EncPulseEA=abs(EA.read());
     EncPulseDA=abs(DA.read());
-    EncPulseAvg=(EncPulseEB+EncPulseDB+EncPulseEA+EncPulseDA)/4;
+    EncPulseAvg=(EncPulseEB+EncPulseEA+EncPulseDA)/3;
   }
 }
 
 void LockEncoders(){
   Locked=true;
   EncPulseEBbackup = EB.read();
-  EncPulseDBbackup = DB.read();
   EncPulseEAbackup = EA.read();
   EncPulseDAbackup = DA.read();
 }
@@ -42,7 +40,6 @@ void LockEncoders(){
 void UnlockEncoders(){
   Locked=false;
   EB.write(EncPulseEBbackup);
-  DB.write(EncPulseDBbackup);
   EA.write(EncPulseEAbackup);
   DA.write(EncPulseDAbackup);
   UpdateEncoders();
@@ -50,11 +47,9 @@ void UnlockEncoders(){
 
 void ResetEncoders(){
   EB.write(0);
-  DB.write(0);
   EA.write(0);
   DA.write(0);
   EncPulseEB=0;
-  EncPulseDB=0;
   EncPulseEA=0;
   EncPulseDA=0;
   EncPulseAvg=0;

@@ -1,19 +1,17 @@
 #include <VL53L0X.h>
 #include <Wire.h>
-#include <Nextion.h>
-NexNumber n0 = NexNumber(0, 2, "n0");
-#define L0XFrontCTxshut 39
-#define L0XFrontAxshut 38
-#define L0XFrontBxshut 49
-#define L0XRightCTxshut 51
-#define L0XRightAxshut 47
+#define L0XFrontCTxshut 41
+#define L0XFrontAxshut 40
+#define L0XFrontBxshut 50
+#define L0XRightCTxshut 53
+#define L0XRightAxshut 49
 #define L0XRightBxshut 48
-#define L0XLeftCTxshut 41
-#define L0XLeftAxshut 40
-#define L0XLeftBxshut 45
+#define L0XLeftCTxshut 43
+#define L0XLeftAxshut 38
+#define L0XLeftBxshut 47
 #define L0XBackCTxshut 46
-#define L0XBackAxshut 50
-#define L0XBackBxshut 43
+#define L0XBackAxshut 51
+#define L0XBackBxshut 45
 VL53L0X FrontCT;
 VL53L0X FrontA;
 VL53L0X FrontB;
@@ -38,8 +36,6 @@ int ToFLeftB=9999;
 int ToFBackCT=9999;
 int ToFBackA=9999;
 int ToFBackB=9999;
-#include "Motors.h"
-#include "PID.h"
 
 
 void setup() {
@@ -47,9 +43,6 @@ void setup() {
   Wire.begin();
   Wire.setClock(100000);
   ToFInitialize();
-  nexInit();
-  MotorsInitialize();
-  MoveForward(150);
 }
 
 void ToFInitialize(){
@@ -170,33 +163,27 @@ void ReadToF(){
 
 void loop() {
   ReadToF();
-  //Serial.println(atan2((ToFRightA-ToFRightB), 160)*57.296);
-  //Serial.println(atan2((ToFLeftA-ToFLeftB), 160)*57.296);
-  //Serial.println(atan2((ToFFrontA-ToFFrontB), 160)*57.296);
-  Serial.println(atan2((ToFBackA-ToFBackB), 160)*57.296);
-  //delay(50);
-  //Serial.print(abs(((ToFRightA+ToFRightB)/2)-ToFRightCT));
-  //Serial.print(ToFFrontA);
-  //erial.print("    ");
-  //Serial.print(ToFFrontCT);
-  //Serial.print("    ");
-  //Serial.print(ToFFrontB);
-  //Serial.print("    ");
-  //Serial.print(ToFRightA);
-  //Serial.print("    ");
-  //Serial.print(ToFRightCT);
-  //Serial.print("    ");
-  //Serial.print(ToFRightB);
-  //Serial.print("    ");
-  //Serial.print(ToFLeftA);
-  //Serial.print("    ");
-  //Serial.print(ToFLeftCT);
-  //Serial.print("    ");
-  //Serial.print(ToFLeftB);
-  //Serial.print("    ");
-  //Serial.print(ToFBackA);
-  //Serial.print("    ");
-  //Serial.print(ToFBackCT);
-  //Serial.print("    ");
-  //Serial.println(ToFBackB);
+  Serial.print(ToFFrontA);
+  Serial.print("    ");
+  Serial.print(ToFFrontCT);
+  Serial.print("    ");
+  Serial.print(ToFFrontB);
+  Serial.print("    ");
+  Serial.print(ToFRightA);
+  Serial.print("    ");
+  Serial.print(ToFRightCT);
+  Serial.print("    ");
+  Serial.print(ToFRightB);
+  Serial.print("    ");
+  Serial.print(ToFLeftA);
+  Serial.print("    ");
+  Serial.print(ToFLeftCT);
+  Serial.print("    ");
+  Serial.print(ToFLeftB);
+  Serial.print("    ");
+  Serial.print(ToFBackA);
+  Serial.print("    ");
+  Serial.print(ToFBackCT);
+  Serial.print("    ");
+  Serial.println(ToFBackB);
 }

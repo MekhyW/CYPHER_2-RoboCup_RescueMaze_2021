@@ -1,30 +1,25 @@
 // CYPHER Robot V3
 // Escola de Robótica ABC Marcelo Salles
-// VERSION: 2.2
+// VERSION: 3.0
 #include <Wire.h>
-#include "IMU.h"
 #include "Temperature.h"
 #include "ToF.h"
 #include "PID.h"
 #include "Encoders.h"
 #include "Reflection.h"
 #include "Cameras.h"
-#include "Display.h"
 #include "Motors.h"
 #include "Map_ADVANCED.h"
-#include "Realsense.h"
 
 void setup() {
   Serial.begin(9600);
   Wire.begin();
   Wire.setClock(100000);
-  DisplayInitialize();
   ToFInitialize();
   CamsInitialize();
   ReflectionInitialize();
   TemperatureInitialize();
   MotorsInitialize();
-  IMUInitialize();
   PressToStart();
   floodfill[currentfloor][PositionX][PositionY]=1;
 }
@@ -33,12 +28,10 @@ void setup() {
 void loop() {
   ResetEncoders();
   ResetPID();
-  WhiteAvgLocal = 0;
-  WhiteAvgLocalDenominator = 0;
-  TileDistLocal = TileDist/cos(abs(90-Inclination)*0.0174);
-  while(EncPulseEB<TileDistLocal || EncPulseDB<TileDistLocal || EncPulseEA<TileDistLocal || EncPulseDA<TileDistLocal){
+  while(EncPulseEB<TileDist || EncPulseEA<TileDist || EncPulseDA<TileDist){
+    ReadRealsense(false);
+    Signalize(0);
     UpdateEncoders();
-    ReadIMU();
     RelativeXY();
   	CheckBackup();
     ReadToF();
@@ -62,17 +55,12 @@ void loop() {
       ReadToF();
     }
     CheckVictim();
-    if(digitalRead(ImpactSensorLeft)==LOW && ToFFrontCT>200 && floodfill[currentfloor][PositionX][PositionY]!=1){
-      AvoidLeft();
-    } else if(digitalRead(ImpactSensorRight)==LOW && ToFFrontCT>200 && floodfill[currentfloor][PositionX][PositionY]!=1){
-      AvoidRight();
-    }
     ReadReflection();
     if(ReflectLeft>TrapLimit && ReflectRight>TrapLimit){
       BlackZone();
       break;
     }
-    MoveForwardPID(200);
+    MoveForwardPID(220);
   }
   NextMove();
 }
@@ -202,33 +190,6 @@ void Align(){
   AlignFrontBack();
 }
 
-
-void AvoidLeft(){
-  LockEncoders();
-  Introduce(1, -1, 200);
-  delay(200);
-  Introduce(2, -1, 200);
-  delay(200);
-  Introduce(1, 1, 200);
-  delay(200);
-  Introduce(2, 1, 200);
-  delay(200);
-  UnlockEncoders();
-}
-
-void AvoidRight(){
-  LockEncoders();  
-  Introduce(2, -1, 200);
-  delay(200);
-  Introduce(1, -1, 200);
-  delay(200);
-  Introduce(2, 1, 200);
-  delay(200);
-  Introduce(1, 1, 200);
-  delay(200);
-  UnlockEncoders();
-}
-
 void WobbleRight(){
 	LockEncoders();
 	RotateRight(200);
@@ -258,22 +219,19 @@ void WobbleLeft(){
 void Retreat(){
   MotorsStop();
   EB.write(abs(EncPulseEB));
-  DB.write(abs(EncPulseDB));
   EA.write(abs(EncPulseEA));
   DA.write(abs(EncPulseDA));
   EncPulseEB=EB.read();
-  EncPulseDB=DB.read();
   EncPulseEA=EA.read();
   EncPulseDA=DA.read();
-  EncPulseAvg=(EncPulseEB+EncPulseDB+EncPulseEA+EncPulseDA)/4;
+  EncPulseAvg=(EncPulseEB+EncPulseEA+EncPulseDA)/3;
   while(EncPulseAvg > 0){
     ReadToF();
     MoveBackwards(200);
     EncPulseEB=EB.read();
-    EncPulseDB=DB.read();
     EncPulseEA=EA.read();
     EncPulseDA=DA.read();
-    EncPulseAvg=(EncPulseEB+EncPulseDB+EncPulseEA+EncPulseDA)/4;
+    EncPulseAvg=(EncPulseEB+EncPulseEA+EncPulseDA)/3;
     CheckVictim();
   }
 }
@@ -282,8 +240,10 @@ void Retreat(){
 void TurnLeft(){
   Rotating=true;
   ResetEncoders();
-  while(EncPulseEB<TurnDist || EncPulseDB<TurnDist || EncPulseEA<TurnDist || EncPulseDA<TurnDist){
-    RotateLeft(200);
+  while(EncPulseEB<TurnDist || EncPulseEA<TurnDist || EncPulseDA<TurnDist){
+    ReadRealsense(true);
+    Signalize(0);
+    RotateLeft(220);
     UpdateEncoders();
     ReadToF();
     CheckVictim();
@@ -308,8 +268,10 @@ void TurnLeft(){
 void TurnRight(){	
   Rotating=true;
   ResetEncoders();
-  while(EncPulseEB<TurnDist || EncPulseDB<TurnDist || EncPulseEA<TurnDist || EncPulseDA<TurnDist){
-    RotateRight(200);
+  while(EncPulseEB<TurnDist || EncPulseEA<TurnDist || EncPulseDA<TurnDist){
+    ReadRealsense(true);
+    Signalize(0);
+    RotateRight(220);
     UpdateEncoders();
     ReadToF();
     CheckVictim();
@@ -378,32 +340,24 @@ void Victim(int type, int side){
   delay(100);
   MotorsRelease();
   if(type==1){
-    for(int i=0; i<5; i++){
-      DrawForegroundPic(1);
-      delay(500);
-      EraseForegroundPic();
-      delay(500); 
+    for(int i=0; i<100; i++){
+      Signalize(3);
+      delay(50); 
     }
   } else if(type==2){
-    for(int i=0; i<5; i++){
-      DrawForegroundPic(2);
-      delay(500);
-      EraseForegroundPic();
-      delay(500); 
+    for(int i=0; i<100; i++){
+      Signalize(1);
+      delay(50); 
     }
   } else if(type==3){
-    for(int i=0; i<5; i++){
-      DrawForegroundPic(3);
-      delay(500);
-      EraseForegroundPic();
-      delay(500); 
+    for(int i=0; i<100; i++){
+      Signalize(3);
+      delay(50); 
     }
   } else if(type==4){
-    for(int i=0; i<5; i++){
-      DrawForegroundPic(4);
-      delay(500);
-      EraseForegroundPic();
-      delay(500); 
+    for(int i=0; i<100; i++){
+      Signalize(2);
+      delay(50); 
     }
   }
   if(EncPulseAvg<=TileDist/2 || Rotating==true){
@@ -412,23 +366,18 @@ void Victim(int type, int side){
     heatmap[currentfloor][ForwardX][ForwardY]=1;
   }
   if(side==1 && type!=4 && KitCounter>0){
-    DrawForegroundPic(10);
     DeployKitLeft();
     if(type==2 && KitCounter>0){
       DeployKitLeft();
     }
-    DrawForegroundPic(11);
     delay(1000);
   } else if(side==2 && type!=4 && KitCounter>0){
-    DrawForegroundPic(12);
     DeployKitRight();
     if(type==2 && KitCounter>0){
       DeployKitRight();
     }
-    DrawForegroundPic(13);
     delay(1000);
   }
-  EraseForegroundPic();
 }
 
 
@@ -443,13 +392,6 @@ void NextMove(){
     MapDisplacement();
   }
   Align();
-  if(OnCheckpoint==true && floodfill[currentfloor][ForwardX][ForwardY]!=100 && (PositionX!=(int)dueFlashStorage.read(0)||PositionY!=(int)dueFlashStorage.read(1)||currentfloor!=(int)dueFlashStorage.read(2))){
-      MotorsStop();
-      UpdateBackup();
-      DrawForegroundPic(8);
-      delay(1000);
-      EraseForegroundPic();
-  }
   IsForwardAvailable=true;
   IsRightAvailable=true;
   IsLeftAvailable=true;
@@ -468,9 +410,10 @@ void NextMove(){
   }
   if(PositionX==15 && PositionY==15 && currentfloor==1 && (floodfill[currentfloor][ForwardX][ForwardY]>0||IsForwardAvailable==false) && (floodfill[currentfloor][RightX][RightY]>0||IsRightAvailable==false) && (floodfill[currentfloor][LeftX][LeftY]>0||IsLeftAvailable==false) && (floodfill[currentfloor][BackwardsX][BackwardsY]>0||IsBackwardsAvailable==false)){
     MotorsStop();
-    DrawForegroundPic(7);
-    delay(10000);
-    EraseForegroundPic();
+    for(int i=0; i<100; i++){
+      Signalize(4);
+      delay(100);
+    }
   }
   MotorsStop();
   MarkAccess();

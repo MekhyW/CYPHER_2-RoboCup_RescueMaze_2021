@@ -1,4 +1,4 @@
-#define SwitchPin 23
+#define SwitchPin 22
 
 void setup() {
   Serial.begin(9600);

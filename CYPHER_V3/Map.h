@@ -1,12 +1,11 @@
-#define SwitchPin 23
-#define ImpactSensorLeft 22
-#define ImpactSensorRight 24
+#define SwitchPin 22
 byte heatmap[2][30][30] = {0};
 byte floodfill[2][30][30] = {0};
 bool IsForwardAvailable=true;
 bool IsRightAvailable=true;
 bool IsLeftAvailable=true;
 bool IsBackwardsAvailable=true;
+int Quadrant=3; //1=left 2=right 3=up 4=down
 int currentfloor=1;
 int PositionX = 15;
 int PositionY = 15;
@@ -19,24 +18,29 @@ int RightY=15;
 int BackwardsX=15;
 int BackwardsY=14;
 bool Rotating=false;
+#include "Realsense.h"
 
 
 void PressToStart(){
-  DrawForegroundPic(9);
-  arrow.setPic(Quadrant);
   pinMode(SwitchPin, INPUT_PULLUP);
   pinMode(ImpactSensorLeft, INPUT_PULLUP);
   pinMode(ImpactSensorRight, INPUT_PULLUP);
 	while(digitalRead(SwitchPin) == HIGH){
-		ReadIMU();
-    n0.setValue(Inclination);
+		ReadRealsense(true);
 	}
   while(digitalRead(SwitchPin) == LOW){
-    ReadIMU();
-    n0.setValue(Inclination);
+    ReadRealsense(true);
   }
-  OnCheckpoint=true;
-  EraseForegroundPic();
+}
+
+void CheckBackup(){
+  if(digitalRead(SwitchPin) == LOW){
+    MotorsStop();
+    delay(100);
+    MotorsRelease();
+    ResetEncoders();
+    PressToStart();
+  }
 }
 
 

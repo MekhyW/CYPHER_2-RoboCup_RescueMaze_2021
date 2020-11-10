@@ -5,32 +5,32 @@ Servo Deployer;
 void setup() {
   Serial.begin(9600);
   Deployer.attach(DeployerPin);
-  Deployer.write(75);
+  Deployer.write(100);
   delay(1000);
 }
 
-void DeployKitRight(){
-  Deployer.write(145);
+void DeployKitLeft(){
+  Deployer.write(170);
   delay(400);
-  Deployer.write(60);
+  Deployer.write(85);
   delay(300);
-  Deployer.write(75);
+  Deployer.write(100);
   delay(300);
 }
 
-void DeployKitLeft(){
-  Deployer.write(5);
+void DeployKitRight(){
+  Deployer.write(30);
   delay(400);
-  Deployer.write(90);
+  Deployer.write(115);
   delay(300);
-  Deployer.write(75);
+  Deployer.write(100);
   delay(300);
 }
 
 
 void loop() {
   Serial.println("here");
-  DeployKitLeft();
+  DeployKitRight();
   delay(2000);
   DeployKitRight();
   delay(2000);

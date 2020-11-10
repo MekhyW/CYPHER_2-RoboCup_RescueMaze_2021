@@ -21,3 +21,13 @@ void ReadCams(){
     MVRightChar = Serial3.read(); 
   }
 }
+
+void Signalize(int command){
+	//0 = off
+	//1 = H/Red
+	//2 = U/Green
+	//3 = S/Yellow/Heated
+	//4 = Exit
+	Serial1.print(command);
+	Serial3.print(command);
+}
