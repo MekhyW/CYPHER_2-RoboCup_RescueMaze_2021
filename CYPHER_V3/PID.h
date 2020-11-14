@@ -41,6 +41,10 @@ void CalculatePID(){
     error += ToFFrontB-ToFFrontA;
     ConservativePID=false;
   }
+  else if(ToFFrontB<300 && ToFFrontCT<300){
+    error += ToFFrontB-ToFFrontCT;
+    ConservativePID=false;
+  }
   else if(abs(((ToFLeftA+ToFLeftB)/2)-ToFLeftCT) < 20){
     error += ToFLeftA-ToFLeftB;
     ConservativePID=true;

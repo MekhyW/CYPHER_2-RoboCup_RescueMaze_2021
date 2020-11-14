@@ -1,7 +1,7 @@
 #include <VL53L0X.h>
 #define L0XFrontCTxshut 41
 #define L0XFrontAxshut 40
-#define L0XFrontBxshut 50
+#define L0XFrontBxshut 51
 #define L0XRightCTxshut 53
 #define L0XRightAxshut 49
 #define L0XRightBxshut 48
@@ -9,7 +9,7 @@
 #define L0XLeftAxshut 38
 #define L0XLeftBxshut 47
 #define L0XBackCTxshut 46
-#define L0XBackAxshut 51
+#define L0XBackAxshut 50
 #define L0XBackBxshut 45
 VL53L0X FrontCT;
 VL53L0X FrontA;
