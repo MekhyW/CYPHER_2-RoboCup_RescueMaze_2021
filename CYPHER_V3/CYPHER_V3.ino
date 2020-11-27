@@ -20,6 +20,7 @@ void setup() {
   ReflectionInitialize();
   TemperatureInitialize();
   MotorsInitialize();
+  Serial.println("SETUP OK");
   PressToStart();
   floodfill[currentfloor][PositionX][PositionY]=1;
 }
@@ -29,6 +30,7 @@ void loop() {
   ResetEncoders();
   ResetPID();
   while(EncPulseEB<TileDist || EncPulseEA<TileDist || EncPulseDA<TileDist){
+    Serial.println("LOOP");
     ReadRealsense(false);
     Signalize(0);
     UpdateEncoders();
@@ -60,7 +62,7 @@ void loop() {
       BlackZone();
       break;
     }
-    MoveForwardPID(220);
+    MoveForwardPID(200);
   }
   NextMove();
 }
@@ -75,24 +77,24 @@ void AlignFrontBack(){
   TargetEncAvg = map(ToFFrontCT - 150, -150, 150, -(TileDist/2), TileDist/2)/2;
   if(ToFFrontCT <= 300 && TargetEncAvg > 0){
     while(EncPulseAvg < TargetEncAvg){
-      MoveForward(150);
+      MoveForward(100);
       UpdateEncoders();
     } 
   } else if(ToFFrontCT <= 300 && TargetEncAvg < 0){
     while(EncPulseAvg < abs(TargetEncAvg)){
-      MoveBackwards(150);
+      MoveBackwards(100);
       UpdateEncoders();
     } 
   }
   TargetEncAvg = map(ToFFrontCT - 450, -150, 150, -(TileDist/2), TileDist/2)/2;
   if(ToFFrontCT <= 600 && ToFFrontCT>=300 && ToFFrontA <= 600 && ToFFrontA>=300 && ToFFrontB <= 600 && ToFFrontB>=300 && TargetEncAvg > 0){
     while(EncPulseAvg < TargetEncAvg){
-      MoveForward(150);
+      MoveForward(100);
       UpdateEncoders();
     } 
   } else if(ToFFrontCT <= 600 && ToFFrontCT>=300 && ToFFrontA <= 600 && ToFFrontA>=300 && ToFFrontB <= 600 && ToFFrontB>=300 && TargetEncAvg < 0){
     while(EncPulseAvg < abs(TargetEncAvg)){
-      MoveBackwards(150);
+      MoveBackwards(100);
       UpdateEncoders();
     } 
   }
@@ -101,24 +103,24 @@ void AlignFrontBack(){
   TargetEncAvg = map(150 - ToFBackCT, -150, 150, -(TileDist/2), TileDist/2)/2;
   if(ToFBackCT <= 300 && TargetEncAvg > 0){
     while(EncPulseAvg < TargetEncAvg){
-      MoveForward(150);
+      MoveForward(100);
       UpdateEncoders();
     } 
   } else if(ToFBackCT <= 300 && TargetEncAvg < 0){
     while(EncPulseAvg < abs(TargetEncAvg)){
-      MoveBackwards(150);
+      MoveBackwards(100);
       UpdateEncoders();
     } 
   }
   TargetEncAvg = map(450 - ToFBackCT, -150, 150, -(TileDist/2), TileDist/2)/2;
   if(ToFBackCT <= 600 && ToFBackCT>=300 && ToFBackA <= 600 && ToFBackA>=300 && ToFBackB <= 600 && ToFBackB>=300 && TargetEncAvg > 0){
     while(EncPulseAvg < TargetEncAvg){
-      MoveForward(150);
+      MoveForward(100);
       UpdateEncoders();
     } 
   } else if(ToFBackCT <= 600 && ToFBackCT>=300 && ToFBackA <= 600 && ToFBackA>=300 && ToFBackB <= 600 && ToFBackB>=300 && TargetEncAvg < 0){
     while(EncPulseAvg < abs(TargetEncAvg)){
-      MoveBackwards(150);
+      MoveBackwards(100);
       UpdateEncoders();
     } 
   }
@@ -131,12 +133,12 @@ void AlignAngle(){
   	  TargetEncAvg = map(atan2((ToFRightA-ToFRightB), 160)*57.296, -90, 90, -(TurnDist), TurnDist)/2;
   	  if(TargetEncAvg > 0){
   	  	while(EncPulseAvg < TargetEncAvg){
-  	  		RotateRight(150);
+  	  		RotateRight(100);
   	  		UpdateEncoders();
   	  	}
   	  } else if(TargetEncAvg < 0){
   	  	while(EncPulseAvg < abs(TargetEncAvg)){
-  	  		RotateLeft(150);
+  	  		RotateLeft(100);
   	  		UpdateEncoders();
   	  	}
   	  }
@@ -145,12 +147,12 @@ void AlignAngle(){
   	  TargetEncAvg = map(atan2((ToFLeftA-ToFLeftB), 160)*57.296, -90, 90, -(TurnDist), TurnDist)/2;
   	  if(TargetEncAvg > 0){
   	  	while(EncPulseAvg < TargetEncAvg){
-  	  		RotateLeft(150);
+  	  		RotateLeft(100);
   	  		UpdateEncoders();
   	  	}
   	  } else if(TargetEncAvg < 0){
   	  	while(EncPulseAvg < abs(TargetEncAvg)){
-  	  		RotateRight(150);
+  	  		RotateRight(100);
   	  		UpdateEncoders();
   	  	}
   	  }
@@ -159,12 +161,12 @@ void AlignAngle(){
   	  TargetEncAvg = map(atan2((ToFFrontA-ToFFrontB), 160)*57.296, -90, 90, -(TurnDist), TurnDist)/2;
   	  if(TargetEncAvg > 0){
   	  	while(EncPulseAvg < TargetEncAvg){
-  	  		RotateRight(150);
+  	  		RotateRight(100);
   	  		UpdateEncoders();
   	  	}
   	  } else if(TargetEncAvg < 0){
   	  	while(EncPulseAvg < abs(TargetEncAvg)){
-  	  		RotateLeft(150);
+  	  		RotateLeft(100);
   	  		UpdateEncoders();
   	  	}
   	  }
@@ -173,12 +175,12 @@ void AlignAngle(){
   	  TargetEncAvg = map(atan2((ToFBackA-ToFBackB), 160)*57.296, -90, 90, -(TurnDist), TurnDist)/2;
   	  if(TargetEncAvg > 0){
   	  	while(EncPulseAvg < TargetEncAvg){
-  	  		RotateRight(150);
+  	  		RotateRight(100);
   	  		UpdateEncoders();
   	  	}
   	  } else if(TargetEncAvg < 0){
   	  	while(EncPulseAvg < abs(TargetEncAvg)){
-  	  		RotateLeft(150);
+  	  		RotateLeft(100);
   	  		UpdateEncoders();
   	  	}
   	  }
@@ -243,7 +245,7 @@ void TurnLeft(){
   while(EncPulseEB<TurnDist || EncPulseEA<TurnDist || EncPulseDA<TurnDist){
     ReadRealsense(true);
     Signalize(0);
-    RotateLeft(220);
+    RotateLeft(150);
     UpdateEncoders();
     ReadToF();
     CheckVictim();
@@ -271,7 +273,7 @@ void TurnRight(){
   while(EncPulseEB<TurnDist || EncPulseEA<TurnDist || EncPulseDA<TurnDist){
     ReadRealsense(true);
     Signalize(0);
-    RotateRight(220);
+    RotateRight(150);
     UpdateEncoders();
     ReadToF();
     CheckVictim();

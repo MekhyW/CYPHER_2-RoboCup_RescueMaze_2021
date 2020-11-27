@@ -1,6 +1,6 @@
 #define ReflectionAPin A6
 #define ReflectionBPin A7
-#define TrapLimit 800
+#define TrapLimit 1000
 float ReflectLeft=100;
 float ReflectRight=100;
 

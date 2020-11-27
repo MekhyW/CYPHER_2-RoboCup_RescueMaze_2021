@@ -23,8 +23,6 @@ bool Rotating=false;
 
 void PressToStart(){
   pinMode(SwitchPin, INPUT_PULLUP);
-  pinMode(ImpactSensorLeft, INPUT_PULLUP);
-  pinMode(ImpactSensorRight, INPUT_PULLUP);
 	while(digitalRead(SwitchPin) == HIGH){
 		ReadRealsense(true);
 	}
