@@ -1,20 +1,22 @@
 #include <Servo.h>
 #define DeployerPin 26
 Servo Deployer;
-#define motorUR 12
-#define motorURdirA 11
-#define motorURdirB 10
-#define motorLR 6
-#define motorLRdirA 4
-#define motorLRdirB 5
-#define motorUL 9
-#define motorULdirA 8
-#define motorULdirB 7
+#define motorUR 9
+#define motorURdirA 8
+#define motorURdirB 7
+#define motorLR 4
+#define motorLRdirA 5
+#define motorLRdirB 6
+#define motorUL 10
+#define motorULdirA 11
+#define motorULdirB 12
 #define motorLL 3
-#define motorLLdirA 2
-#define motorLLdirB 28
-#define stdbyL 25
-#define stdbyR 53
+#define motorLLdirA 28
+#define motorLLdirB 2
+#define motorUR_ENABLE 52
+#define motorLR_ENABLE 24
+#define motorUL_ENABLE 39
+#define motorLL_ENABLE 33
 int KitCounter=12;
 
 void MotorsRelease(){
@@ -42,7 +44,7 @@ void MotorsStop(){
 
 void MotorsInitialize(){
   Deployer.attach(DeployerPin);
-  Deployer.write(75);
+  Deployer.write(100);
   pinMode(motorUL, OUTPUT);
   pinMode(motorULdirA, OUTPUT);
   pinMode(motorULdirB, OUTPUT);
@@ -55,11 +57,15 @@ void MotorsInitialize(){
   pinMode(motorLR, OUTPUT);
   pinMode(motorLRdirA, OUTPUT);
   pinMode(motorLRdirB, OUTPUT);
-  pinMode(stdbyR, OUTPUT);
-  digitalWrite(stdbyR, HIGH);
-  pinMode(stdbyL, OUTPUT);
-  digitalWrite(stdbyL, HIGH);
-  MotorsRelease();
+  pinMode(motorUR_ENABLE, OUTPUT);
+  pinMode(motorLR_ENABLE, OUTPUT);
+  pinMode(motorUL_ENABLE, OUTPUT);
+  pinMode(motorLL_ENABLE, OUTPUT);
+  digitalWrite(motorUR_ENABLE, HIGH);
+  digitalWrite(motorLR_ENABLE, HIGH);
+  digitalWrite(motorUL_ENABLE, HIGH);
+  digitalWrite(motorLL_ENABLE, HIGH);
+  MotorsStop();
 }
 
 void URForward(){

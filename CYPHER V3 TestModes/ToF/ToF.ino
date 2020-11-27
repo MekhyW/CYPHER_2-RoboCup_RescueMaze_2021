@@ -1,5 +1,6 @@
 #include <VL53L0X.h>
 #include <Wire.h>
+#include "Motors.h"
 #define L0XFrontCTxshut 41
 #define L0XFrontAxshut 40
 #define L0XFrontBxshut 51
@@ -43,6 +44,9 @@ void setup() {
   Wire.begin();
   Wire.setClock(100000);
   ToFInitialize();
+
+  MotorsInitialize();
+  MoveForward(150);
 }
 
 void ToFInitialize(){

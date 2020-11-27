@@ -1,16 +1,20 @@
 #include "Encoders.h"
-#define motorUR 12
-#define motorURdirA 11
-#define motorURdirB 10
-#define motorLR 6
-#define motorLRdirA 4
-#define motorLRdirB 5
-#define motorUL 9
-#define motorULdirA 8
-#define motorULdirB 7
+#define motorUR 9
+#define motorURdirA 8
+#define motorURdirB 7
+#define motorLR 4
+#define motorLRdirA 5
+#define motorLRdirB 6
+#define motorUL 10
+#define motorULdirA 11
+#define motorULdirB 12
 #define motorLL 3
-#define motorLLdirA 2
-#define motorLLdirB 28
+#define motorLLdirA 28
+#define motorLLdirB 2
+#define motorUR_ENABLE 52
+#define motorLR_ENABLE 24
+#define motorUL_ENABLE 39
+#define motorLL_ENABLE 33
 
 void MotorsRelease(){
   digitalWrite(motorULdirA, LOW);
@@ -48,6 +52,14 @@ void MotorsInitialize(){
   pinMode(motorLR, OUTPUT);
   pinMode(motorLRdirA, OUTPUT);
   pinMode(motorLRdirB, OUTPUT);
+  pinMode(motorUR_ENABLE, OUTPUT);
+  pinMode(motorLR_ENABLE, OUTPUT);
+  pinMode(motorUL_ENABLE, OUTPUT);
+  pinMode(motorLL_ENABLE, OUTPUT);
+  digitalWrite(motorUR_ENABLE, HIGH);
+  digitalWrite(motorLR_ENABLE, HIGH);
+  digitalWrite(motorUL_ENABLE, HIGH);
+  digitalWrite(motorLL_ENABLE, HIGH);
   MotorsRelease();
 }
 
@@ -158,8 +170,8 @@ void IntroduceLeft(int speed){
 void setup() {
   Serial.begin(9600);
   MotorsInitialize();
-  while(EncPulseEB<TurnDist || EncPulseDB<TurnDist || EncPulseEA<TurnDist || EncPulseDA<TurnDist){
-    RotateLeft(200);
+  while(EncPulseEB<TileDist || EncPulseEA<TileDist || EncPulseDA<TileDist){
+    MoveForward(200);
     UpdateEncoders();
     delay(100);
   }

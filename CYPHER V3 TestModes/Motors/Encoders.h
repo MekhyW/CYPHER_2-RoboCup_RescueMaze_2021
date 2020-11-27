@@ -1,10 +1,10 @@
 #include <Encoder.h>
-#define TileDist 4500
-#define TurnDist 2565
+#define TileDist 4550
+#define TurnDist 2420
 Encoder EB(29, 27);
-Encoder DB(31, 33);
-Encoder EA(32, 30);
-Encoder DA(42, 44);
+Encoder DB(25, 23);
+Encoder EA(30, 32);
+Encoder DA(44, 42);
 //E=left , D=right
 //A=front , B=back
 int EncPulseEB=0;
@@ -22,10 +22,9 @@ int EncPulseDAbackup=0;
 void UpdateEncoders(){
   if(Locked==false){
     EncPulseEB=abs(EB.read());
-    EncPulseDB=abs(DB.read());
     EncPulseEA=abs(EA.read());
     EncPulseDA=abs(DA.read());
-    EncPulseAvg=(EncPulseEB+EncPulseDB+EncPulseEA+EncPulseDA)/4;
+    EncPulseAvg=(EncPulseEB+EncPulseEA+EncPulseDA)/3;
   }
 }
 
