@@ -10,6 +10,6 @@ void ReflectionInitialize(){
 }
 
 void ReadReflection(){
-  ReflectLeft = (analogRead(ReflectionAPin)*0.7)+(ReflectRight*0.3);
-  ReflectRight = (analogRead(ReflectionBPin)*0.7)+(ReflectLeft*0.3);
+  ReflectLeft = (analogRead(ReflectionAPin)*0.5)+(ReflectRight*0.5);
+  ReflectRight = (analogRead(ReflectionBPin)*0.5)+(ReflectLeft*0.5);
 }

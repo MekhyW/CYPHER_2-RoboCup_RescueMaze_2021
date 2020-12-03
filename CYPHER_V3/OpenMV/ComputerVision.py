@@ -1,9 +1,10 @@
 import sensor, image, time, math
 from pyb import LED,UART,Pin
+uart = UART(3, 9600, timeout_char=10)
+uart.init(9600)
 sensor.reset()
 sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QQSIF)
-sensor.skip_frames(time = 2000)
 sensor.set_auto_gain(True)
 sensor.set_auto_whitebal(True)
 sensor.set_auto_exposure(True)
@@ -15,8 +16,6 @@ letter_thresholds = (0, 50)
 red_thresholds = (30, 70, 30, 100, 30, 100)
 yellow_thresholds = (70, 100, -10, 30, 60, 100)
 green_thresholds = (30, 100, -100, -40, 30, 100)
-uart = UART(3, 9600, timeout_char=10)
-uart.init(9600)
 Command = 99
 LastCommand = 99
 clock = time.clock()
@@ -67,7 +66,6 @@ while(True):
         if(max(blob.w(), blob.h())/min(blob.w()+blob.w(), blob.h())<1.5 and blob.cx()+(blob.w()/2)<ImageX and blob.cx()-(blob.w()/2)>0 and blob.cy()-(blob.h()/2)>0 and blob.cy()+(blob.h()/2)<ImageY and math.sqrt(((blob.cx()-(ImageX/2))*(blob.cx()-(ImageX/2)))+((blob.cy()-(ImageY/2))*(blob.cy()-(ImageY/2))))<(ImageY/3) and img.get_statistics(roi=blob.rect()).stdev()<30):
             green_blobfound=True
             img.draw_rectangle(blob.rect())
-    img.cartoon(size=1, seed_threshold=1)
     img.binary([letter_thresholds], zero=True)
     letter_blobfound=False
     for blob in img.find_blobs([letter_thresholds], area_threshold=150, merge=False):
@@ -99,38 +97,39 @@ while(True):
     else:
         print(clock.fps())
         uart.write('n')
-    while uart.any():
-        Command = uart.read(1)
+    while (uart.any()):
+        Command = uart.read(1).decode()
+        print(Command)
     if(Command != LastCommand):
+        LastCommand = Command
         if(Command == '0'):
-            pyb.LED(1).off()
-            pyb.LED(2).off()
-            pyb.LED(3).off()
+            LED(1).off()
+            LED(2).off()
+            LED(3).off()
         elif(Command == '1'):
-            for x in range(100):
-                pyb.LED(1).on()
-                time.sleep_ms(25)
-                pyb.LED(1).off()
-                time.sleep_ms(25)
+            for x in range(50):
+                LED(1).on()
+                time.sleep(50)
+                LED(1).off()
+                time.sleep(50)
         elif(Command == '2'):
-            for x in range(100):
-                pyb.LED(2).on()
-                time.sleep_ms(25)
-                pyb.LED(2).off()
-                time.sleep_ms(25)
+            for x in range(50):
+                LED(2).on()
+                time.sleep(50)
+                LED(2).off()
+                time.sleep(50)
         elif(Command == '3'):
-            for x in range(100):
-                pyb.LED(1).on()
-                pyb.LED(2).on()
-                time.sleep_ms(25)
-                pyb.LED(1).off()
-                pyb.LED(2).off()
-                time.sleep_ms(25)
+            for x in range(50):
+                LED(1).on()
+                LED(2).on()
+                time.sleep(50)
+                LED(1).off()
+                LED(2).off()
+                time.sleep(50)
         elif(Command == '4'):
             for x in range(100):
-                pyb.LED(3).on()
-                time.sleep_ms(50)
-                pyb.LED(3).off()
-                time.sleep_ms(50)
-    LastCommand = Command
+                LED(3).on()
+                time.sleep(50)
+                LED(3).off()
+                time.sleep(50)
 

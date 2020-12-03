@@ -62,7 +62,7 @@ void loop() {
       BlackZone();
       break;
     }
-    MoveForwardPID(200);
+    MoveForwardPID(150);
   }
   NextMove();
 }
@@ -199,7 +199,7 @@ void WobbleRight(){
     MoveBackwards(200);
     delay(40);
     RotateLeft(200);
-    delay(56);
+    delay(70);
     MoveForward(200);
     delay(40);
     UnlockEncoders();
@@ -212,7 +212,7 @@ void WobbleLeft(){
     MoveBackwards(200);
     delay(40);
     RotateRight(200);
-    delay(56);
+    delay(70);
     MoveForward(200);
     delay(40);
     UnlockEncoders();
