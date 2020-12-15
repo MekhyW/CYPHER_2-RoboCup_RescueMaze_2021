@@ -62,7 +62,7 @@ void loop() {
       BlackZone();
       break;
     }
-    MoveForwardPID(150);
+    MoveForwardPID(200);
   }
   NextMove();
 }
@@ -245,7 +245,7 @@ void TurnLeft(){
   while(EncPulseEB<TurnDist || EncPulseEA<TurnDist || EncPulseDA<TurnDist){
     ReadRealsense(true);
     Signalize(0);
-    RotateLeft(150);
+    RotateLeft(200);
     UpdateEncoders();
     ReadToF();
     CheckVictim();
@@ -273,7 +273,7 @@ void TurnRight(){
   while(EncPulseEB<TurnDist || EncPulseEA<TurnDist || EncPulseDA<TurnDist){
     ReadRealsense(true);
     Signalize(0);
-    RotateRight(150);
+    RotateRight(200);
     UpdateEncoders();
     ReadToF();
     CheckVictim();

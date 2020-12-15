@@ -195,21 +195,21 @@ void RotateRight(int speed){
 
 
 void DeployKitLeft(){
-  //Deployer.write(170);
-  //delay(400);
-  //Deployer.write(85);
-  //delay(300);
-  //Deployer.write(100);
-  //delay(300);
-  //KitCounter--;
+  Deployer.write(170);
+  delay(400);
+  Deployer.write(85);
+  delay(300);
+  Deployer.write(100);
+  delay(300);
+  KitCounter--;
 }
 
 void DeployKitRight(){
-  //Deployer.write(30);
-  //delay(400);
-  //Deployer.write(115);
-  //delay(300);
-  //Deployer.write(100);
-  //delay(300);
-  //KitCounter--;
+  Deployer.write(30);
+  delay(400);
+  Deployer.write(115);
+  delay(300);
+  Deployer.write(100);
+  delay(300);
+  KitCounter--;
 }

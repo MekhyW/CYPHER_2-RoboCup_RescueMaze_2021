@@ -112,12 +112,18 @@ while(True):
                 time.sleep(50)
                 LED(1).off()
                 time.sleep(50)
+                while (uart.any()):
+                    Command = uart.read(1).decode()
+                    print(Command)
         elif(Command == '2'):
             for x in range(50):
                 LED(2).on()
                 time.sleep(50)
                 LED(2).off()
                 time.sleep(50)
+                while (uart.any()):
+                    Command = uart.read(1).decode()
+                    print(Command)
         elif(Command == '3'):
             for x in range(50):
                 LED(1).on()
@@ -126,10 +132,16 @@ while(True):
                 LED(1).off()
                 LED(2).off()
                 time.sleep(50)
+                while (uart.any()):
+                    Command = uart.read(1).decode()
+                    print(Command)
         elif(Command == '4'):
             for x in range(100):
                 LED(3).on()
                 time.sleep(50)
                 LED(3).off()
                 time.sleep(50)
+                while (uart.any()):
+                    Command = uart.read(1).decode()
+                    print(Command)
 

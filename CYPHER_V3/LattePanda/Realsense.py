@@ -9,6 +9,7 @@ pipe.start(cfg)
 while True:
     try:
         DUE = serial.Serial('COM14', 9600)
+        LEONARDO = serial.Serial('???', 9600)
         break
     except:
         pass
@@ -48,5 +49,7 @@ while True:
         if data.tracker_confidence >= 2:
             DUE.write("{}-{}\n".format(round(ROBOT_POSITION_X/30), round(ROBOT_POSITION_Y/30)).encode())
             print("{}-{}\n".format(round(ROBOT_POSITION_X/30), round(ROBOT_POSITION_Y/30)).encode())
-        #while DUE.in_waiting:
-        #    print(DUE.readline())
+            if(math.sqrt(int((data.velocity.x*100)**2) + int((data.velocity.y*100)**2) + int((data.velocity.z*100)**2)) > 10):
+                LEONARDO.write(1)
+            else:
+                LEONARDO.write(0)
