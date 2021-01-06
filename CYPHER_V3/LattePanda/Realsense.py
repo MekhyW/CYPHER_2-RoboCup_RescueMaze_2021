@@ -8,8 +8,8 @@ pipe.start(cfg)
 
 while True:
     try:
-        DUE = serial.Serial('COM14', 9600)
-        LEONARDO = serial.Serial('???', 9600)
+        DUE = serial.Serial('COM7', 9600)
+        LEONARDO = serial.Serial('COM5', 9600)
         break
     except:
         pass
@@ -28,28 +28,31 @@ def quaternion_to_euler(x, y, z, w):
     return X, Y, Z
 
 while True:
-    frames = pipe.wait_for_frames()
-    pose = frames.get_pose_frame()
-    if pose:
-        data = pose.get_pose_data()
-        Alpha, Beta, Gamma = quaternion_to_euler(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w)
-        ROBOT_COMPASS = int(Beta*(-1))
-        if not 0 < abs(Alpha) < 90:
-            if ROBOT_COMPASS > 0:
-                ROBOT_COMPASS = 180 - ROBOT_COMPASS
-            else:
-                ROBOT_COMPASS = (-180) - ROBOT_COMPASS
-        if ROBOT_COMPASS < 0:
-            ROBOT_COMPASS += 360
-        ROBOT_COMPASS += 90
-        if ROBOT_COMPASS > 360:
-            ROBOT_COMPASS -= 360
-        ROBOT_POSITION_X = (((+1) * data.translation.x) * 100) - (9.5 * math.cos(math.radians(ROBOT_COMPASS))) + 465 - 15
-        ROBOT_POSITION_Y = (((-1) * data.translation.z) * 100) - (9.5 * math.sin(math.radians(ROBOT_COMPASS))) + 465 - 15
-        if data.tracker_confidence >= 2:
-            DUE.write("{}-{}\n".format(round(ROBOT_POSITION_X/30), round(ROBOT_POSITION_Y/30)).encode())
-            print("{}-{}\n".format(round(ROBOT_POSITION_X/30), round(ROBOT_POSITION_Y/30)).encode())
-            if(math.sqrt(int((data.velocity.x*100)**2) + int((data.velocity.y*100)**2) + int((data.velocity.z*100)**2)) > 10):
-                LEONARDO.write(1)
-            else:
-                LEONARDO.write(0)
+    try:
+        frames = pipe.wait_for_frames()
+        pose = frames.get_pose_frame()
+        if pose:
+            data = pose.get_pose_data()
+            Alpha, Beta, Gamma = quaternion_to_euler(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w)
+            ROBOT_COMPASS = int(Beta*(-1))
+            if not 0 < abs(Alpha) < 90:
+                if ROBOT_COMPASS > 0:
+                    ROBOT_COMPASS = 180 - ROBOT_COMPASS
+                else:
+                    ROBOT_COMPASS = (-180) - ROBOT_COMPASS
+            if ROBOT_COMPASS < 0:
+                ROBOT_COMPASS += 360
+            ROBOT_COMPASS += 90
+            if ROBOT_COMPASS > 360:
+                ROBOT_COMPASS -= 360
+            ROBOT_POSITION_X = (((+1) * data.translation.x) * 100) - (9.5 * math.cos(math.radians(ROBOT_COMPASS))) + 465 - 15
+            ROBOT_POSITION_Y = (((-1) * data.translation.z) * 100) - (9.5 * math.sin(math.radians(ROBOT_COMPASS))) + 465 - 15
+            if data.tracker_confidence >= 2:
+                DUE.write("{}-{}\n".format(round(ROBOT_POSITION_X/30), round(ROBOT_POSITION_Y/30)).encode())
+                print("{}-{}\n".format(round(ROBOT_POSITION_X/30), round(ROBOT_POSITION_Y/30)).encode())
+                if(math.sqrt(int((data.velocity.x*100)**2) + int((data.velocity.y*100)**2) + int((data.velocity.z*100)**2)) > 10):
+                    LEONARDO.write(1)
+                else:
+                    LEONARDO.write(0)
+    except:
+        pass

@@ -1,4 +1,4 @@
-int Command = 0;
+int Command = 1;
 int LastCommand = 99;
 
 void setup() {

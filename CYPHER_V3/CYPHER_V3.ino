@@ -38,6 +38,7 @@ void loop() {
   	CheckBackup();
     ReadToF();
     if(ToFFrontCT<=150 || (ToFFrontA<=150 && ToFFrontB<=150)){
+      MotorsStop();
       break;
     }
     while(ToFLeftA<120 && ToFLeftB>120 && ToFFrontB>150 && ToFRightA>120){
